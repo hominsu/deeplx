@@ -2,7 +2,20 @@
 name = "deeplx-server"
 version = "0.1.0"
 edition = "2021"
-authors = ["Homing So <i@homing.so>"]
+authors = [
+    "Homing So <i@homing.so>"
+]
+description = "A Rust DeepLX implementation"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/hominsu/deeplx"
+keywords = ["deeplx", "translation"]
+categories = ["text-processing", "internationalization", "web-programming::http-server"]
+exclude = [".*"]
+
+[[bin]]
+name = "deeplx"
+path = "src/main.rs"
 
 [workspace]
 members = ["crates/*"]
