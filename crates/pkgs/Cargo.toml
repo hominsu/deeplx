@@ -1,0 +1,16 @@
+[package]
+name = "pkgs"
+version = "0.1.0"
+edition = "2021"
+publish = false
+authors = ["Homing So <i@homing.so>"]
+
+[lib]
+name = "pkgs"
+path = "src/lib.rs"
+
+[dependencies]
+tracing.workspace = true
+tokio.workspace = true
+serde.workspace = true
+axum.workspace = true

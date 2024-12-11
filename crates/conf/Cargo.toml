@@ -1,0 +1,18 @@
+[package]
+name = "conf"
+version = "0.1.0"
+edition = "2021"
+publish = false
+authors = ["Homing So <i@homing.so>"]
+
+[lib]
+name = "conf"
+path = "src/lib.rs"
+
+[dependencies]
+glob.workspace = true
+notify.workspace = true
+config.workspace = true
+serde.workspace = true
+tokio.workspace = true
+tracing.workspace = true

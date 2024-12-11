@@ -1,0 +1,19 @@
+[package]
+name = "routes"
+version = "0.1.0"
+edition = "2021"
+publish = false
+authors = ["Homing So <i@homing.so>"]
+
+[lib]
+name = "routes"
+path = "src/lib.rs"
+
+[dependencies]
+biz.workspace = true
+conf.workspace = true
+data.workspace = true
+pkgs.workspace = true
+
+serde.workspace = true
+axum.workspace = true

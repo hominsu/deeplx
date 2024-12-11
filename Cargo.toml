@@ -1,0 +1,47 @@
+[package]
+name = "deeplx-server"
+version = "0.1.0"
+edition = "2021"
+authors = ["Homing So <i@homing.so>"]
+
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.dependencies]
+biz = { path = "crates/biz" }
+conf = { path = "crates/conf" }
+data = { path = "crates/data" }
+pkgs = { path = "crates/pkgs" }
+routes = { path = "crates/routes" }
+
+async-trait = { version = "0.1" }
+
+glob = { version = "0.3.1" }
+notify = { version = "7.0.0" }
+config = { version = "0.14.1", features = ["ini", "json", "yaml", "toml", "ron", "json5"] }
+
+tracing = { version = "0.1" }
+tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
+
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+
+tower-http = { version = "0.6.2", features = ["trace"] }
+axum = { version = "0.7.9", features = ["tracing", "macros"] }
+
+deeplx = { version = "0.1.6" }
+
+[dependencies]
+conf.workspace = true
+data.workspace = true
+biz.workspace = true
+routes.workspace = true
+pkgs.workspace = true
+
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tokio.workspace = true
+tower-http.workspace = true
+axum.workspace = true
+deeplx.workspace = true

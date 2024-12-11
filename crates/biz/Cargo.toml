@@ -1,0 +1,18 @@
+[package]
+name = "biz"
+version = "0.1.0"
+edition = "2021"
+publish = false
+authors = ["Homing So <i@homing.so>"]
+
+[lib]
+name = "biz"
+path = "src/lib.rs"
+
+[dependencies]
+pkgs.workspace = true
+
+async-trait.workspace = true
+serde.workspace = true
+axum.workspace = true
+deeplx.workspace = true

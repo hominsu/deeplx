@@ -1,0 +1,19 @@
+[package]
+name = "data"
+version = "0.1.0"
+edition = "2021"
+publish = false
+authors = ["Homing So <i@homing.so>"]
+
+[lib]
+name = "data"
+path = "src/lib.rs"
+
+[dependencies]
+biz.workspace = true
+pkgs.workspace = true
+
+async-trait.workspace = true
+tracing.workspace = true
+axum.workspace = true
+deeplx.workspace = true
