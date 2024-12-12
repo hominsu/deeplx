@@ -7,6 +7,22 @@ use pkgs::{Error, Json};
 use serde::Serialize;
 use std::sync::Arc;
 
+#[async_trait::async_trait]
+pub trait TranslateRepo: Send + Sync {
+    async fn translate(
+        &self,
+        text: &str,
+        source_lang: &str,
+        target_lang: &str,
+        tag_handling: Option<&str>,
+        dl_session: Option<&str>,
+    ) -> Result<DeepLXTranslationResult, Error>;
+}
+
+pub struct TranslateUsecase {
+    repo: Arc<dyn TranslateRepo>,
+}
+
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct TranslateResult {
@@ -27,19 +43,17 @@ pub struct TranslateResultUnknown {
     pub message: Option<String>,
 }
 
-#[async_trait::async_trait]
-pub trait TranslateRepo: Send + Sync {
-    async fn translate_free(
-        &self,
-        text: &str,
-        source_lang: &str,
-        target_lang: &str,
-        tag_handling: Option<&str>,
-    ) -> Result<DeepLXTranslationResult, Error>;
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub struct Translation {
+    pub detected_source_language: String,
+    pub text: String,
 }
 
-pub struct TranslateUsecase {
-    repo: Arc<dyn TranslateRepo>,
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub struct TranslateResultOfficial {
+    pub translations: Vec<Translation>,
 }
 
 impl TranslateUsecase {
@@ -47,16 +61,17 @@ impl TranslateUsecase {
         Self { repo }
     }
 
-    pub async fn translate_free(
+    pub async fn translate(
         &self,
         text: &str,
         source_lang: &str,
         target_lang: &str,
         tag_handling: Option<&str>,
+        dl_session: Option<&str>,
     ) -> Result<Response, Error> {
         let res = self
             .repo
-            .translate_free(text, source_lang, target_lang, tag_handling)
+            .translate(text, source_lang, target_lang, tag_handling, dl_session)
             .await?;
 
         match res.code {
@@ -68,6 +83,34 @@ impl TranslateUsecase {
                 source_lang: res.source_lang,
                 target_lang: res.target_lang,
                 method: res.method,
+            })
+            .with_status_code(StatusCode::OK)
+            .into_response()),
+            _ => Ok(Json(TranslateResultUnknown {
+                code: res.code as u16,
+                message: res.message,
+            })
+            .with_status_code(StatusCode::from_u16(res.code as u16).unwrap())
+            .into_response()),
+        }
+    }
+
+    pub async fn translate_official(
+        &self,
+        text: &str,
+        target_lang: &str,
+    ) -> Result<Response, Error> {
+        let res = self
+            .repo
+            .translate(text, "auto", target_lang, None, None)
+            .await?;
+
+        match res.code {
+            200 => Ok(Json(TranslateResultOfficial {
+                translations: vec![Translation {
+                    detected_source_language: res.source_lang,
+                    text: res.data,
+                }],
             })
             .with_status_code(StatusCode::OK)
             .into_response()),

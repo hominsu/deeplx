@@ -10,6 +10,8 @@ pub enum Error {
     JsonRejection(JsonRejection),
     InvalidTagHandling,
     InternalServerError,
+    DeepLSessionMissing,
+    DeepLUnauthorized,
 }
 
 impl IntoResponse for Error {
@@ -30,6 +32,13 @@ impl IntoResponse for Error {
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Internal Server Error".to_string(),
             ),
+            Error::DeepLSessionMissing => {
+                (StatusCode::UNAUTHORIZED, "No dl_session Found".to_string())
+            }
+            Error::DeepLUnauthorized => (
+                StatusCode::UNAUTHORIZED,
+                "Your account is not a Pro account. Please upgrade your account or switch to a different account.".to_string()
+            )
         };
 
         Json(ErrorResponse {

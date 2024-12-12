@@ -14,5 +14,7 @@ pub struct AppState {
 pub fn router<T>(state: AppState) -> Router {
     Router::new()
         .route("/translate", post(translate::translate_free))
+        .route("/v1/translate", post(translate::translate_pro))
+        .route("/v2/translate", post(translate::translate_official))
         .with_state(state)
 }
