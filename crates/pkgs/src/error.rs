@@ -1,4 +1,5 @@
 use crate::Json;
+
 use axum::{
     extract::rejection::JsonRejection,
     http::StatusCode,
@@ -12,6 +13,7 @@ pub enum Error {
     InternalServerError,
     DeepLSessionMissing,
     DeepLUnauthorized,
+    InvalidAccessToken,
 }
 
 impl IntoResponse for Error {
@@ -38,7 +40,11 @@ impl IntoResponse for Error {
             Error::DeepLUnauthorized => (
                 StatusCode::UNAUTHORIZED,
                 "Your account is not a Pro account. Please upgrade your account or switch to a different account.".to_string()
-            )
+            ),
+            Error::InvalidAccessToken => (
+                StatusCode::UNAUTHORIZED,
+                "Invalid access token".to_string(),
+            ),
         };
 
         Json(ErrorResponse {

@@ -2,7 +2,7 @@ use crate::AppState;
 
 use axum::{
     extract::{Form, State},
-    http::HeaderMap,
+    http::{header, HeaderMap},
     response::Response,
 };
 use pkgs::{Error, Json};
@@ -53,7 +53,7 @@ pub async fn translate_pro(
     let target_lang = payload.target_lang;
     let tag_handling = payload.tag_handling.as_deref();
     let dl_session = headers
-        .get("cookie")
+        .get(header::COOKIE)
         .map(|c| c.to_str().unwrap().replace("dl_session=", ""));
 
     if tag_handling.is_some_and(|tag_handling| !matches!(tag_handling, "html" | "xml")) {

@@ -15,5 +15,7 @@ conf.workspace = true
 data.workspace = true
 pkgs.workspace = true
 
+async-trait.workspace = true
 serde.workspace = true
 axum.workspace = true
+axum-extra.workspace = true
